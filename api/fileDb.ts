@@ -1,9 +1,9 @@
-import {promises as fs} from 'fs';
-import {existsSync} from "node:fs";
-import {Message, MessageWithoutId} from "./types";
+import { promises as fs } from "fs";
+import { existsSync } from "node:fs";
+import { Message, MessageWithoutId } from "./types";
 import * as crypto from "node:crypto";
 
-const filename = './db.json';
+const filename = "./messages.json";
 let data: Message[] = [];
 
 const fileDb = {
@@ -22,7 +22,7 @@ const fileDb = {
   },
   async getAllMessages() {
     await fileDb.init();
-    return data.reverse();
+    return data;
   },
   async addNewMessage(messageToAdd: MessageWithoutId) {
     const newMessage = {id: crypto.randomUUID(), ...messageToAdd};
@@ -30,7 +30,7 @@ const fileDb = {
     await this.save();
     return newMessage;
   },
-  async save () {
+  async save() {
     return fs.writeFile(filename, JSON.stringify(data));
   }
 };

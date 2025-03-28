@@ -1,6 +1,6 @@
 export interface Message {
   id: string;
-  author: string | null;
+  author: string;
   description: string;
   image: string | null;
 }
