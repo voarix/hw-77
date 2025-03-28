@@ -1,6 +1,6 @@
 import { IMessage } from "../../types";
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchAllMessages } from "./messagesThunks.ts";
+import { createMessage, fetchAllMessages } from "./messagesThunks.ts";
 import { RootState } from "../../app/store.ts";
 
 interface MessageState {
@@ -33,6 +33,18 @@ export const messageSlice = createSlice({
       })
       .addCase(fetchAllMessages.rejected, (state) => {
         state.fetchLoading = true;
+      })
+
+      .addCase(createMessage.pending, (state) => {
+        state.createLoading = true;
+        state.error = false;
+      })
+      .addCase(createMessage.fulfilled, (state) => {
+        state.createLoading = false;
+      })
+      .addCase(createMessage.rejected, (state) => {
+        state.createLoading = false;
+        state.error = true;
       });
   }
 });

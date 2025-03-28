@@ -22,7 +22,10 @@ const fileDb = {
   },
   async getAllMessages() {
     await fileDb.init();
-    return data;
+    return data.reverse();
+  },
+  async getProductById(param_id: string) {
+    return data.find(p => p.id === param_id);
   },
   async addNewMessage(messageToAdd: MessageWithoutId) {
     const newMessage = {id: crypto.randomUUID(), ...messageToAdd};

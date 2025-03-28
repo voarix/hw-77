@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, CardHeader, Typography } from "@mui/material";
+import { Box, Card, CardContent, CardHeader, CardMedia, Typography } from "@mui/material";
 import React from "react";
 
 interface Props {
@@ -32,7 +32,18 @@ const MessageItem : React.FC<Props>= ({author, description, image}) => {
             </Box>
           }
         />
-        {image}
+        {image && (
+          <CardMedia
+            component="img"
+            image={`http://localhost:8000/${image}`}
+            sx={{
+              maxHeight: 400,
+              width: '100%',
+              objectFit: 'cover'
+            }}
+          />
+        )}
+
         <CardContent
           sx={{
             p: 1.5,

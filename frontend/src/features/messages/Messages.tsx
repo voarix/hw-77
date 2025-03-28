@@ -1,12 +1,13 @@
 import { useAppDispatch, useAppSelector } from "../../app/hooks.ts";
 import { selectMessages, selectMessagesLoading } from "./messagesSlice.ts";
 import Grid from "@mui/material/Grid2";
-import {Button, Typography} from "@mui/material";
-import {Link} from "react-router-dom";
+import { Typography } from "@mui/material";
 import Spinner from "../../components/UI/Spinner.tsx";
 import MessageItem from "./components/MessageItem.tsx";
 import { useEffect } from "react";
-import { fetchAllMessages } from "./messagesThunks.ts";
+import { createMessage, fetchAllMessages } from "./messagesThunks.ts";
+import { IMessageMutation } from "../../types";
+import MessageForm from "./components/MessageForm.tsx";
 
 const Messages = () => {
   const dispatch = useAppDispatch();
@@ -15,21 +16,33 @@ const Messages = () => {
 
   useEffect(() => {
     dispatch(fetchAllMessages());
-  }, [dispatch])
+  }, [dispatch]);
+
+  const onCreateNewMessage = async (message: IMessageMutation) => {
+    try {
+      await dispatch(createMessage(message)).unwrap();
+      await dispatch(fetchAllMessages());
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   return (
     <>
       <Grid container direction="column" spacing={2}>
-        <Grid container justifyContent="space-between" alignItems="center">
+
+        <Grid>
+          <Typography variant="h5" gutterBottom>
+            Добавить новое сообщение
+          </Typography>
+          <MessageForm onSubmitMessageToAdd={onCreateNewMessage} />
+        </Grid>
+
+        <Grid container justifyContent="space-between" alignItems="center" sx={{ marginTop: 5}}>
           <Grid>
             <Typography variant="h4">
               Messages
             </Typography>
-          </Grid>
-          <Grid>
-            <Button color="primary" component={Link} to='/products/new'>
-              Add product
-            </Button>
           </Grid>
         </Grid>
         {messagesFetchLoading ? <Spinner /> :
